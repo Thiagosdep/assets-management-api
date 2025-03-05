@@ -1,12 +1,17 @@
 import { UserService } from './user.service';
 import { UserEntity } from './entities/user.entity';
-import { users } from '../mocks/user';
+import { Repository } from 'typeorm';
+import { createMock } from '@golevelup/ts-jest';
+import { randomUUID } from 'crypto';
 
 describe('UserService', () => {
+  const date = new Date();
   let userService: UserService;
+  let userRepository: Repository<UserEntity>;
 
   beforeEach(() => {
-    userService = new UserService();
+    userRepository = createMock<Repository<UserEntity>>();
+    userService = new UserService(userRepository);
   });
 
   it('should be defined', () => {
@@ -14,26 +19,45 @@ describe('UserService', () => {
   });
 
   describe('get', () => {
-    it('should return a user entity if the user is found', () => {
+    it('should return a user entity if the user is found', async () => {
       // Given
-      const userId = '1';
-      const expectedUser = users.find((user) => user.id === userId);
+      const userId = randomUUID();
 
       // When
-      const result = userService.get(userId);
+      userRepository.findOneBy = jest.fn().mockResolvedValue(
+        new UserEntity({
+          id: userId,
+          name: 'John Doe',
+          email: 'johndoe@email.com',
+          cpf: '123456789',
+          phoneNumber: '123456789',
+          createdAt: date,
+          updatedAt: date,
+        }),
+      );
+
+      const result = await userService.get(userId);
 
       // Then
       expect(result).toBeInstanceOf(UserEntity);
-      expect(result.id).toBe(expectedUser?.id);
-      expect(result.name).toBe(expectedUser?.name);
+      expect(result).toEqual({
+        id: userId,
+        name: 'John Doe',
+        email: 'johndoe@email.com',
+        cpf: '123456789',
+        phoneNumber: '123456789',
+        createdAt: date,
+        updatedAt: date,
+      });
     });
 
-    it('should throw NotFoundException if the user is not found', () => {
+    it('should throw NotFoundException if the user is not found', async () => {
       // Given
       const userId = '999';
+      userRepository.findOneBy = jest.fn().mockResolvedValue(null);
 
       // When / Then
-      expect(() => userService.get(userId)).toThrow('User not found');
+      await expect(userService.get(userId)).rejects.toThrow('User not found');
     });
   });
 });

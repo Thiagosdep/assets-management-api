@@ -8,8 +8,8 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get('/:id')
-  get(@Param('id') id: string): UserDTO {
-    const user = this.userService.get(id);
+  async get(@Param('id') id: string): Promise<UserDTO> {
+    const user = await this.userService.get(id);
     return UserAdapter.toUserDTO(user);
   }
 }

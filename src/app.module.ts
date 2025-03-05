@@ -16,10 +16,10 @@ import { AppConfigModule } from './infrastructure/config/config.module';
   imports: [
     LoggerModule,
     UserModule,
+    TypeOrmModule.forRootAsync(databaseProviders(ConnectionNameEnum.ONLY_READ)),
     TypeOrmModule.forRootAsync(
       databaseProviders(ConnectionNameEnum.READ_WRITE),
     ),
-    TypeOrmModule.forRootAsync(databaseProviders(ConnectionNameEnum.ONLY_READ)),
     AppConfigModule,
   ],
   controllers: [AppController, UserController],

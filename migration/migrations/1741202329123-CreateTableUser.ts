@@ -7,7 +7,7 @@ export class CreateTableUser1741202329123 implements MigrationInterface {
     await queryRunner.startTransaction();
     try {
       await queryRunner.query(`
-            CREATE TABLE IF NOT EXISTS users (
+            CREATE TABLE IF NOT EXISTS assets_management_api.users (
               id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
               name VARCHAR NOT NULL,
               cpf VARCHAR UNIQUE NOT NULL,
@@ -29,7 +29,9 @@ export class CreateTableUser1741202329123 implements MigrationInterface {
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.startTransaction();
     try {
-      await queryRunner.query(`DROP TABLE IF EXISTS users CASCADE;`);
+      await queryRunner.query(
+        `DROP TABLE IF EXISTS assets_management_api.users CASCADE;`,
+      );
       await queryRunner.commitTransaction();
     } catch (error) {
       await queryRunner.rollbackTransaction();

@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { NotFoundException } from '@nestjs/common';
+import { randomUUID } from 'crypto';
 
 describe('UserController', () => {
   let controller: UserController;
@@ -30,28 +31,23 @@ describe('UserController', () => {
   });
 
   describe('get', () => {
-    it('should throw an error if the user does not exist', () => {
+    it('should throw an error if the user does not exist', async () => {
       // Given
-      const userId = '3';
+      const userId = randomUUID();
 
-      userServiceMock.get = jest.fn().mockImplementation(() => {
-        throw new NotFoundException('User not found');
-      });
+      userServiceMock.get.mockRejectedValue(
+        new NotFoundException('User not found'),
+      );
 
-      // When
-      const response = () => controller.get(userId);
-
-      // Then
-      expect(response).toThrow('User not found');
+      // When / Then
+      await expect(controller.get(userId)).rejects.toThrow('User not found');
       expect(userServiceMock.get).toHaveBeenCalledWith(userId);
     });
 
-    it('should return user by id', () => {
+    it('should return user by id', async () => {
       // Given
-      const userId = '3';
-
-      // Configura o mock para lançar uma exceção
-      userServiceMock.get = jest.fn().mockReturnValue({
+      const userId = randomUUID();
+      const user = {
         id: userId,
         name: 'John Doe',
         email: 'johndoe@email.com',
@@ -60,10 +56,12 @@ describe('UserController', () => {
         createdAt: new Date(),
         updatedAt: new Date(),
         deletedAt: null,
-      });
+      };
+
+      userServiceMock.get.mockResolvedValue(user);
 
       // When
-      const response = controller.get(userId);
+      const response = await controller.get(userId);
 
       // Then
       expect(response).toEqual({

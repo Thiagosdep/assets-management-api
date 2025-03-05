@@ -29,6 +29,7 @@ export const databaseProviders = (
           ? hostReadWrite
           : hostOnlyRead;
       return {
+        name: connectionName,
         type: 'postgres',
         host,
         port,
