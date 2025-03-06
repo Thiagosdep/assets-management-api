@@ -1,7 +1,10 @@
 import { TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
 import { AppConfigModule } from '../config/config.module';
 import { AppConfigService } from '../config/config.service';
-import { UserEntity } from '../../user/entities/user.entity';
+import { UserEntity } from '../../user/entities/User.entity';
+import { UserWalletEntity } from '../../user-wallet/entities/UserWallet.entity';
+import { UserWalletHistoryEntity } from '../../user-wallet/entities/UserWalletHistory.entity';
+import { AssetEntity } from '../../user-wallet/entities/Asset.entity';
 
 export enum ConnectionNameEnum {
   READ_WRITE = 'READ_WRITE',
@@ -37,7 +40,12 @@ export const databaseProviders = (
         password,
         database,
         schema,
-        entities: [UserEntity],
+        entities: [
+          UserEntity,
+          UserWalletEntity,
+          UserWalletHistoryEntity,
+          AssetEntity,
+        ],
         synchronize: false,
         logging: false,
       };

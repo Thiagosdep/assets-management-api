@@ -1,4 +1,4 @@
-import { UserEntity } from '../entities/user.entity';
+import { UserEntity } from '../entities/User.entity';
 import { UserDTO } from '../dtos/user.controller.dto';
 
 export class UserAdapter {

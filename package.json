@@ -18,7 +18,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "migration:create": "typeorm-ts-node-commonjs migration:create ./migration/migrations/CreateTableUser",
+    "migration:create": "typeorm-ts-node-commonjs migration:create ./migration/migrations/CreateWalletContextTables",
     "migration:run": "typeorm-ts-node-commonjs migration:run -d ./migration/orm.config.ts",
     "migration:revert": "typeorm-ts-node-commonjs migration:revert -d ./migration/orm.config.ts"
   },
@@ -29,6 +29,7 @@
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/typeorm": "^11.0.0",
     "@types/pino": "^7.0.4",
+    "class-transformer": "^0.5.1",
     "pg": "^8.13.3",
     "pino": "^9.6.0",
     "pino-pretty": "^13.0.0",

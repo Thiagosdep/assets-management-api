@@ -11,6 +11,7 @@ import {
   databaseProviders,
 } from './infrastructure/database/database.provider';
 import { AppConfigModule } from './infrastructure/config/config.module';
+import { UserWalletModule } from './user-wallet/user-wallet.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { AppConfigModule } from './infrastructure/config/config.module';
       databaseProviders(ConnectionNameEnum.READ_WRITE),
     ),
     AppConfigModule,
+    UserWalletModule,
   ],
   controllers: [AppController, UserController],
   providers: [AppService, UserService],

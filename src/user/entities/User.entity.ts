@@ -1,3 +1,4 @@
+import { UserWalletEntity } from '../../user-wallet/entities/UserWallet.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -5,6 +6,8 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
+  OneToMany,
+  JoinColumn,
 } from 'typeorm';
 
 @Entity({ name: 'users' })
@@ -36,4 +39,8 @@ export class UserEntity {
 
   @DeleteDateColumn({ name: 'deleted_at', nullable: true, default: null })
   deletedAt: Date | null;
+
+  @OneToMany(() => UserWalletEntity, (userWallet) => userWallet.user)
+  @JoinColumn({ name: 'id' })
+  userWallets: UserWalletEntity[];
 }
